@@ -3,1809 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="発売予定の新作ゲームをまとめてチェック。PS5、Switch、PC、Xboxの最新タイトル情報。">
-    <meta name="theme-color" content="#6366f1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>新作ゲームリリース</title>
+    <meta name="description" content="Day One — Release Intelligence. The upcoming games database.">
+    <meta name="theme-color" content="#08090a">
+    <title>Day One — Release Intelligence</title>
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0a0a0b;
-            --bg-elevated: #111113;
-            --bg-card: #18181b;
-            --bg-card-hover: #1f1f23;
-            --bg-overlay: rgba(0,0,0,0.85);
-            --text-primary: #fafafa;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --accent-soft: rgba(99, 102, 241, 0.12);
-            --border: #27272a;
-            --border-soft: #1f1f23;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-            --shadow: 0 8px 32px rgba(0,0,0,0.4);
-            --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
-            --radius: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            /* デザイナー選定のカラーパレット */
+            --bg-base: #08090a;
+            --bg-surface: #121417;
+            --bg-card: #1c1f24;
+            --accent: #5865f2;
+            --text-main: #f2f5f7;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(88, 101, 242, 0.4);
+
+            --radius-ui: 10px;
+            --radius-card: 16px;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.4s var(--ease-out-expo);
         }
 
         .light-mode {
-            --bg-base: #f9fafb;
-            --bg-elevated: #ffffff;
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
             --bg-card: #ffffff;
-            --bg-card-hover: #f3f4f6;
-            --bg-overlay: rgba(255,255,255,0.9);
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
-            --border: #e5e7eb;
-            --border-soft: #f3f4f6;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow: 0 8px 32px rgba(0,0,0,0.08);
-            --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+            --text-main: #0f172a;
+            --text-dim: #64748b;
+            --text-muted: #94a3b8;
+            --border: rgba(0, 0, 0, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
             background: var(--bg-base);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            min-height: 100dvh;
-            transition: background var(--transition), color var(--transition);
-            overflow-x: hidden;
+            color: var(--text-main);
+            line-height: 1.5;
+            transition: background 0.3s ease;
         }
 
-        /* ===== UTILITIES ===== */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            border: 0;
-        }
-
-        /* ===== LAYOUT ===== */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
 
         /* ===== HEADER ===== */
         header {
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: var(--bg-base);
-            border-bottom: 1px solid var(--border-soft);
+            z-index: 1000;
+            background: rgba(8, 9, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             padding: 16px 0;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
 
-        .header-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-        }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.05em;
             text-decoration: none;
-            color: inherit;
+            color: var(--text-main);
+            text-transform: uppercase;
         }
 
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent), #a855f7);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .logo-text {
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+        .logo span { color: var(--accent); }
 
         .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
-            transition: all var(--transition);
+            transition: var(--transition);
         }
 
-        .icon-btn:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--text-muted);
-            transform: scale(1.05);
-        }
+        .icon-btn:hover { background: var(--bg-surface); border-color: var(--text-dim); }
 
-        .icon-btn:active {
-            transform: scale(0.95);
+        /* ===== HERO ===== */
+        .hero { padding: 80px 0 60px; text-align: left; }
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
         }
+        .hero p { font-size: 1.1rem; color: var(--text-dim); font-weight: 400; max-width: 600px; }
 
         /* ===== CONTROLS ===== */
-        .controls {
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+        .controls-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 48px;
         }
 
-        .search-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 240px;
-            position: relative;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-
+        .search-wrapper { position: relative; margin-bottom: 24px; }
         .search-input {
             width: 100%;
-            padding: 11px 16px 11px 42px;
-            border-radius: 100px;
+            background: var(--bg-base);
             border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 0.875rem;
+            border-radius: 12px;
+            padding: 16px 16px 16px 48px;
+            color: var(--text-main);
             font-family: inherit;
-            transition: all var(--transition);
+            font-size: 1rem;
+            transition: var(--transition);
         }
+        .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.1); }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        .search-input::placeholder { color: var(--text-muted); }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-soft);
-        }
+        .filter-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
 
-        .filter-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .select-wrap {
-            position: relative;
-        }
-
-        .filter-select {
-            padding: 10px 36px 10px 14px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 0.8rem;
-            font-family: inherit;
-            cursor: pointer;
-            appearance: none;
-            transition: all var(--transition);
-        }
-
-        .select-wrap::after {
-            content: '';
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 5px solid var(--text-muted);
-            pointer-events: none;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .filter-btn {
-            padding: 10px 16px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 0.8rem;
-            font-family: inherit;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all var(--transition);
-            white-space: nowrap;
-        }
-
-        .filter-btn:hover { background: var(--bg-card-hover); }
-        .filter-btn.active {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        /* Tabs & View Toggle */
-        .tabs-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .pill-group {
-            display: inline-flex;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 4px;
-            gap: 2px;
-        }
-
+        .pill-group { display: flex; background: var(--bg-base); padding: 4px; border-radius: 10px; gap: 2px; }
         .pill-btn {
-            padding: 8px 16px;
-            border-radius: 100px;
             border: none;
             background: transparent;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-family: inherit;
-            font-weight: 500;
+            color: var(--text-dim);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            transition: var(--transition);
         }
+        .pill-btn.active { background: var(--bg-card); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-        .pill-btn:hover { color: var(--text-primary); }
-        .pill-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .pill-btn.active-subtle {
+        .select-ui {
             background: var(--bg-base);
-            color: var(--text-primary);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .light-mode .pill-btn.active-subtle {
-            background: var(--bg-card-hover);
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-top: 1px solid var(--border-soft);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .stats-bar button {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 0.8rem;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
             cursor: pointer;
-            font-family: inherit;
         }
 
-        .stats-bar button:hover { text-decoration: underline; }
-
-        /* ===== GAMES GRID ===== */
+        /* ===== GRID & CARDS ===== */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            padding-bottom: 32px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
         }
 
         .game-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+            border-radius: var(--radius-card);
             border: 1px solid var(--border);
+            transition: var(--transition);
             cursor: pointer;
-            position: relative;
-            opacity: 0;
-            transform: translateY(16px);
-            animation: cardIn 0.4s ease forwards;
-            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .game-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--text-muted);
+            transform: translateY(-8px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .game-card:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-        }
+        .card-image-wrap { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #000; }
+        .card-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-out-expo); }
+        .game-card:hover .card-image { transform: scale(1.05); }
 
-        @keyframes cardIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-image-wrap {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 16/9;
-            background: var(--bg-elevated);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .game-card:hover .card-image {
-            transform: scale(1.05);
-        }
-
-        .card-image.loading {
-            filter: blur(10px);
-        }
-
-        .card-badges {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .card-badge {
-            padding: 4px 10px;
-            border-radius: 100px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .card-badge.release {
-            background: rgba(99, 102, 241, 0.85);
-            color: white;
-        }
-
-        .card-badge.soon {
-            background: rgba(239, 68, 68, 0.85);
-            color: white;
-        }
-
-        .fav-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all var(--transition);
-            z-index: 2;
-        }
-
-        .fav-btn:hover {
-            background: rgba(0,0,0,0.7);
-            transform: scale(1.1);
-        }
-
-        .card-body {
-            padding: 14px 16px 16px;
-        }
-
+        .card-body { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.4;
-        }
-
-        .card-meta {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        .meta-badge {
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 600;
-        }
-
-        .meta-badge.rating {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-
-        .meta-badge.score {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
             font-weight: 700;
-        }
-
-        .meta-badge.score.high { background: rgba(34,197,94,0.15); color: var(--success); }
-        .meta-badge.score.mid { background: rgba(245,158,11,0.15); color: var(--warning); }
-        .meta-badge.score.low { background: rgba(239,68,68,0.15); color: var(--danger); }
-
-        .card-platforms {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .plat-tag {
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.6rem;
-            font-weight: 500;
-            background: var(--bg-base);
-            color: var(--text-secondary);
-        }
-
-        .light-mode .plat-tag {
-            background: var(--bg-card-hover);
-        }
-
-        .card-genres {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-top: 8px;
-        }
-
-        .genre-tag {
-            padding: 2px 8px;
-            border-radius: 100px;
-            font-size: 0.6rem;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        /* ===== LOAD MORE ===== */
-        .load-more-wrap {
-            text-align: center;
-            padding: 24px 0 48px;
-        }
-
-        .load-more-btn {
-            padding: 12px 32px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            font-family: inherit;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .load-more-btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-
-        .load-more-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ===== SKELETON ===== */
-        .skeleton-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .skeleton-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .skeleton-img {
-            aspect-ratio: 16/9;
-            background: linear-gradient(90deg, var(--bg-elevated) 0%, var(--bg-card-hover) 50%, var(--bg-elevated) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 1.2s ease-in-out infinite;
-        }
-
-        .skeleton-body { padding: 14px 16px 16px; }
-
-        .skeleton-line {
-            height: 12px;
-            border-radius: 6px;
-            background: linear-gradient(90deg, var(--bg-elevated) 0%, var(--bg-card-hover) 50%, var(--bg-elevated) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 1.2s ease-in-out infinite;
-            margin-bottom: 10px;
-        }
-
-        .skeleton-line.w60 { width: 60%; }
-        .skeleton-line.w40 { width: 40%; }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* ===== CALENDAR VIEW ===== */
-        .calendar { padding-bottom: 48px; }
-
-        .cal-month { margin-bottom: 32px; }
-
-        .cal-month-title {
-            font-size: 1rem;
-            font-weight: 600;
+            line-height: 1.3;
             margin-bottom: 12px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-
-        .cal-header {
-            padding: 8px 4px;
-            text-align: center;
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .cal-day {
-            min-height: 80px;
-            background: var(--bg-card);
-            border-radius: 8px;
-            padding: 6px;
-            border: 1px solid var(--border);
-            transition: border-color var(--transition);
-        }
-
-        .cal-day:hover { border-color: var(--text-muted); }
-        .cal-day.empty { background: transparent; border-style: dashed; border-color: var(--border-soft); }
-        .cal-day.today { border-color: var(--accent); }
-
-        .cal-day-num {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .cal-day.today .cal-day-num { color: var(--accent); }
-
-        .cal-game {
-            padding: 3px 6px;
-            background: var(--accent-soft);
-            color: var(--accent);
-            border-radius: 4px;
-            font-size: 0.6rem;
-            font-weight: 500;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .cal-game:hover { background: var(--accent); color: white; }
-
-        .cal-more {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-overlay);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-
-        .modal {
-            background: var(--bg-elevated);
-            border-radius: var(--radius-xl);
-            max-width: 720px;
-            width: 100%;
-            max-height: calc(100vh - 32px);
-            max-height: calc(100dvh - 32px);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border);
-            transform: translateY(24px) scale(0.96);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0) scale(1);
-        }
-
-        .modal-header {
-            position: relative;
-        }
-
-        .modal-hero {
-            width: 100%;
-            aspect-ratio: 16/7;
-            object-fit: cover;
-            background: var(--bg-base);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition);
-        }
-
-        .modal-close:hover { background: rgba(0,0,0,0.7); transform: scale(1.05); }
-
-        .modal-actions {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .modal-action-btn {
-            padding: 8px 16px;
-            border-radius: 100px;
-            border: none;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            color: white;
-            font-size: 0.75rem;
-            font-family: inherit;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all var(--transition);
-        }
-
-        .modal-action-btn:hover { background: var(--accent); }
-
-        .modal-body {
-            padding: 24px;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.01em;
-        }
-
-        .modal-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .modal-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .modal-section {
+        .card-footer {
+            margin-top: auto;
             padding-top: 16px;
-            margin-top: 16px;
             border-top: 1px solid var(--border);
-        }
-
-        .modal-section-title {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-bottom: 10px;
-        }
-
-        .modal-screenshots {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 8px;
-        }
-
-        .modal-ss {
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            transition: all var(--transition);
-        }
-
-        .modal-ss:hover {
-            transform: scale(1.03);
-            border-color: var(--accent);
-        }
-
-        .modal-trailer {
-            position: relative;
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .modal-trailer video {
-            width: 100%;
-            display: block;
-            border-radius: 12px;
-        }
-
-        .trailer-placeholder {
-            aspect-ratio: 16/9;
-            background: var(--bg-base);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-radius: 12px;
-            border: 1px dashed var(--border);
-        }
-
-        .modal-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.875rem;
-            word-break: break-all;
-        }
-
-        .modal-link:hover { text-decoration: underline; }
-
-        /* ===== HISTORY SIDEBAR ===== */
-        .history-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 320px;
-            max-width: 90vw;
-            height: 100vh;
-            height: 100dvh;
-            background: var(--bg-elevated);
-            border-left: 1px solid var(--border);
-            z-index: 200;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .history-panel.open { transform: translateX(0); }
-
-        .history-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .history-header h3 {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .history-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-        }
-
-        .history-item {
-            display: flex;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background var(--transition);
-        }
-
-        .history-item:hover { background: var(--bg-card-hover); }
-
-        .history-item img {
-            width: 60px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 6px;
-            background: var(--bg-card);
-        }
-
-        .history-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .history-item-title {
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .history-item-date {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .history-empty {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        /* ===== TOAST ===== */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1100;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            pointer-events: none;
-        }
-
-        .toast {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            padding: 12px 20px;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            box-shadow: var(--shadow);
-            opacity: 0;
-            transform: translateY(16px);
-            animation: toastIn 0.3s ease forwards;
-            pointer-events: auto;
-        }
-
-        .toast.out { animation: toastOut 0.3s ease forwards; }
-
-        @keyframes toastIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes toastOut {
-            to { opacity: 0; transform: translateY(-16px); }
-        }
-
-        /* ===== BACK TO TOP ===== */
-        .back-top {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: none;
-            background: var(--accent);
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            z-index: 90;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(8px);
-            transition: all 0.3s ease;
-        }
-
-        .back-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-        .back-top:hover { background: var(--accent-hover); transform: translateY(-2px); }
-
-        /* ===== FOOTER ===== */
-        footer {
-            text-align: center;
-            padding: 24px 20px 32px;
-            color: var(--text-muted);
+        .score-tag {
+            font-weight: 700;
             font-size: 0.75rem;
-            border-top: 1px solid var(--border-soft);
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
         }
 
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
+        .date-text { font-size: 0.8rem; color: var(--text-dim); font-weight: 500; }
+
+        /* ===== MODAL & OTHERS (Existing logic integration) ===== */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--bg-surface); width: 100%; max-width: 800px; max-height: 90vh;
+            border-radius: 24px; overflow-y: auto; border: 1px solid var(--border);
         }
 
-        .empty-state p { font-size: 0.9rem; margin-bottom: 16px; }
-
-        .retry-btn {
-            padding: 10px 24px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .retry-btn:hover { background: var(--accent); border-color: var(--accent); color: white; }
-
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .container { padding: 0 16px; }
-
-            .logo-text { display: none; }
-
-            .games-grid, .skeleton-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-
-            .tabs-row { flex-direction: column; align-items: stretch; gap: 10px; }
-            .pill-group { justify-content: center; }
-
-            .cal-day { min-height: 60px; padding: 4px; }
-            .cal-header { font-size: 0.55rem; padding: 6px 2px; }
-            .cal-day-num { font-size: 0.65rem; }
-            .cal-game { font-size: 0.55rem; padding: 2px 4px; }
-
-            .back-top { bottom: 16px; right: 16px; width: 44px; height: 44px; }
-        }
-
-        @media (max-width: 480px) {
-            .games-grid, .skeleton-grid {
-                grid-template-columns: 1fr;
-            }
+            .hero { padding: 60px 0 40px; }
+            .controls-panel { padding: 20px; }
+            .games-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container header-inner">
-            <a href="#" class="logo" onclick="scrollToTop(); return false;">
-                <div class="logo-icon">🎮</div>
-                <span class="logo-text">新作ゲームリリース</span>
-            </a>
-            <div class="header-actions">
-                <button class="icon-btn" onclick="toggleHistory()" title="閲覧履歴">📋</button>
-                <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="テーマ切替">🌙</button>
+            <a href="#" class="logo" onclick="location.reload();">DAY ONE<span>.</span></a>
+            <div style="display: flex; gap: 12px;">
+                <button class="icon-btn" onclick="toggleHistory()">📋</button>
+                <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <div class="controls">
-            <div class="search-row">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="ゲーム名で検索...">
-                </div>
-                <div class="filter-group">
-                    <div class="select-wrap">
-                        <select class="filter-select" id="platformFilter">
-                            <option value="">全機種</option>
-                            <option value="pc">PC</option>
-                            <option value="playstation">PlayStation</option>
-                            <option value="xbox">Xbox</option>
-                            <option value="nintendo">Switch</option>
-                            <option value="ios">iOS</option>
-                            <option value="android">Android</option>
-                        </select>
-                    </div>
-                    <div class="select-wrap">
-                        <select class="filter-select" id="genreFilter">
-                            <option value="">全ジャンル</option>
-                            <option value="action">アクション</option>
-                            <option value="adventure">アドベンチャー</option>
-                            <option value="rpg">RPG</option>
-                            <option value="shooter">シューター</option>
-                            <option value="strategy">ストラテジー</option>
-                            <option value="puzzle">パズル</option>
-                            <option value="racing">レース</option>
-                            <option value="sports">スポーツ</option>
-                            <option value="simulation">シミュレーション</option>
-                            <option value="indie">インディー</option>
-                        </select>
-                    </div>
-                    <div class="select-wrap">
-                        <select class="filter-select" id="sortSelect">
-                            <option value="released">発売日順</option>
-                            <option value="rating">評価順</option>
-                            <option value="name">名前順</option>
-                            <option value="metacritic">メタスコア順</option>
-                        </select>
-                    </div>
-                    <div class="select-wrap">
-                        <select class="filter-select" id="ratingFilter">
-                            <option value="">全評価</option>
-                            <option value="4">★4以上</option>
-                            <option value="3">★3以上</option>
-                        </select>
-                    </div>
-                    <button class="filter-btn" id="favBtn" onclick="toggleFavFilter()">♥ お気に入り</button>
-                </div>
+        <section class="hero">
+            <h1>Ready for Day One?</h1>
+            <p>Intelligence for the next generation of play. Curated release data from across the industry.</p>
+        </section>
+
+        <div class="controls-panel">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by title, genre, or platform...">
             </div>
 
-            <div class="tabs-row">
+            <div class="filter-row">
                 <div class="pill-group" id="periodTabs">
-                    <button class="pill-btn active" data-period="week">今週</button>
-                    <button class="pill-btn" data-period="month">今月</button>
-                    <button class="pill-btn" data-period="next">来月</button>
-                    <button class="pill-btn" data-period="all">すべて</button>
+                    <button class="pill-btn active" data-period="week">THIS WEEK</button>
+                    <button class="pill-btn" data-period="month">THIS MONTH</button>
+                    <button class="pill-btn" data-period="next">UPCOMING</button>
+                    <button class="pill-btn" data-period="all">ALL</button>
                 </div>
-                <div class="pill-group" id="viewTabs">
-                    <button class="pill-btn active-subtle" data-view="grid">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
-                        一覧
-                    </button>
-                    <button class="pill-btn" data-view="calendar">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4 0a1 1 0 0 1 1 1v1h6V1a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h1V1a1 1 0 0 1 1-1zM2 6v8h12V6H2z"/></svg>
-                        カレンダー
-                    </button>
-                </div>
-            </div>
 
-            <div class="stats-bar">
-                <span id="statsText">読み込み中...</span>
-                <button onclick="clearFilters()">フィルターをリセット</button>
+                <div style="display: flex; gap: 12px;">
+                    <select class="select-ui" id="platformFilter">
+                        <option value="">PLATFORMS</option>
+                        <option value="pc">PC</option>
+                        <option value="playstation">PlayStation</option>
+                        <option value="xbox">Xbox</option>
+                        <option value="nintendo">Switch</option>
+                    </select>
+                    <select class="select-ui" id="sortSelect">
+                        <option value="released">RELEASE DATE</option>
+                        <option value="rating">RATING</option>
+                        <option value="metacritic">METASCORE</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div id="app"></div>
+        <div id="app">
+            </div>
     </main>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <img class="modal-hero" id="modalHero" src="" alt="">
-                <button class="modal-close" onclick="closeModal()">✕</button>
-                <div class="modal-actions">
-                    <button class="modal-action-btn" onclick="shareGame()">📤 シェア</button>
-                    <button class="modal-action-btn" id="modalFavBtn" onclick="toggleModalFav()">♥ お気に入り</button>
-                </div>
+    <div class="modal-overlay" id="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()" id="modalContent">
             </div>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
     </div>
-
-    <div class="history-panel" id="historyPanel">
-        <div class="history-header">
-            <h3>最近見たゲーム</h3>
-            <button class="icon-btn" onclick="toggleHistory()" style="width:32px;height:32px;font-size:0.9rem;">✕</button>
-        </div>
-        <div class="history-list" id="historyList"></div>
-    </div>
-
-    <div class="toast-container" id="toasts"></div>
-
-    <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
-
-    <footer>
-        <p>データ提供: RAWG.io ｜ PWA対応 ｜ オフライン閲覧可能</p>
-    </footer>
 
     <script>
         const API_KEY = '3685e4c5ce214e98918ea16de4ecd1a2';
         const $ = id => document.getElementById(id);
         const app = $('app');
 
-        // State
         let state = {
             games: [],
             filtered: [],
             page: 1,
             loading: false,
-            hasMore: true,
-            view: localStorage.getItem('view') || 'grid',
-            period: localStorage.getItem('period') || 'week',
-            sort: localStorage.getItem('sort') || 'released',
-            favOnly: false,
-            currentGame: null
+            period: 'week',
+            sort: 'released'
         };
 
         let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        let history = JSON.parse(localStorage.getItem('history') || '[]');
         let apiCache = {};
 
-        // ===== INIT =====
-        function init() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
-            }
-
-            loadTheme();
-            restoreFilters();
+        async function init() {
             setupListeners();
-            fetchGames();
-        }
-
-        function loadTheme() {
-            const dark = localStorage.getItem('theme') !== 'light';
-            document.body.classList.toggle('light-mode', !dark);
-            $('themeBtn').textContent = dark ? '🌙' : '☀️';
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            const isLight = document.body.classList.contains('light-mode');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            $('themeBtn').textContent = isLight ? '☀️' : '🌙';
-        }
-
-        function restoreFilters() {
-            $('sortSelect').value = state.sort;
-            document.querySelectorAll('#periodTabs .pill-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.period === state.period);
-            });
-            document.querySelectorAll('#viewTabs .pill-btn').forEach(b => {
-                const isActive = b.dataset.view === state.view;
-                b.classList.toggle('active-subtle', isActive);
-                b.classList.remove('active');
-            });
+            await fetchGames();
         }
 
         function setupListeners() {
-            $('searchInput').addEventListener('input', debounce(filter, 200));
+            $('searchInput').addEventListener('input', debounce(filter, 300));
             $('platformFilter').addEventListener('change', filter);
-            $('genreFilter').addEventListener('change', filter);
-            $('ratingFilter').addEventListener('change', filter);
             $('sortSelect').addEventListener('change', e => {
                 state.sort = e.target.value;
-                localStorage.setItem('sort', state.sort);
                 filter();
             });
 
             $('periodTabs').addEventListener('click', e => {
                 const btn = e.target.closest('.pill-btn');
                 if (!btn) return;
-                document.querySelectorAll('#periodTabs .pill-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 state.period = btn.dataset.period;
-                localStorage.setItem('period', state.period);
                 filter();
-            });
-
-            $('viewTabs').addEventListener('click', e => {
-                const btn = e.target.closest('.pill-btn');
-                if (!btn) return;
-                document.querySelectorAll('#viewTabs .pill-btn').forEach(b => {
-                    b.classList.remove('active-subtle', 'active');
-                });
-                btn.classList.add('active-subtle');
-                state.view = btn.dataset.view;
-                localStorage.setItem('view', state.view);
-                render();
-            });
-
-            $('modal').addEventListener('click', e => {
-                if (e.target === $('modal')) closeModal();
-            });
-
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                    closeHistory();
-                }
-            });
-
-            window.addEventListener('scroll', () => {
-                $('backTop').classList.toggle('visible', window.scrollY > 500);
             });
         }
 
-        // ===== API =====
         function getDateRange(period) {
             const today = new Date();
             const start = new Date();
             const end = new Date();
-
-            switch (period) {
-                case 'week': end.setDate(today.getDate() + 7); break;
-                case 'month': end.setMonth(today.getMonth() + 1); end.setDate(0); break;
-                case 'next':
-                    start.setMonth(today.getMonth() + 1); start.setDate(1);
-                    end.setMonth(today.getMonth() + 2); end.setDate(0);
-                    break;
-                default: end.setMonth(today.getMonth() + 4);
-            }
-
+            if (period === 'week') end.setDate(today.getDate() + 7);
+            else if (period === 'month') end.setMonth(today.getMonth() + 1);
+            else if (period === 'next') { start.setMonth(today.getMonth() + 1); end.setMonth(today.getMonth() + 2); }
+            else { end.setFullYear(today.getFullYear() + 1); }
             const fmt = d => d.toISOString().split('T')[0];
             return { start: fmt(start), end: fmt(end) };
         }
 
-        async function fetchGames(loadMore = false) {
+        async function fetchGames() {
             if (state.loading) return;
             state.loading = true;
-
-            if (!loadMore) {
-                state.page = 1;
-                state.games = [];
-                state.hasMore = true;
-                showSkeleton();
-            }
+            app.innerHTML = '<div style="text-align:center; padding: 100px; color:var(--text-dim);">Loading intelligence...</div>';
 
             try {
                 const range = getDateRange('all');
-                const cacheKey = `games_${range.start}_${range.end}_${state.page}`;
-
-                let data;
-                if (apiCache[cacheKey]) {
-                    data = apiCache[cacheKey];
-                } else {
-                    const res = await fetch(
-                        `https://api.rawg.io/api/games?key=${API_KEY}&dates=${range.start},${range.end}&ordering=released&page_size=40&page=${state.page}`
-                    );
-                    data = await res.json();
-                    apiCache[cacheKey] = data;
-                }
-
-                const newGames = data.results || [];
-                state.hasMore = !!data.next;
-
-                const ids = new Set(state.games.map(g => g.id));
-                newGames.forEach(g => {
-                    if (!ids.has(g.id)) {
-                        state.games.push(g);
-                        ids.add(g.id);
-                    }
-                });
-
-                state.page++;
+                const res = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&dates=${range.start},${range.end}&ordering=released&page_size=40`);
+                const data = await res.json();
+                state.games = data.results || [];
                 filter();
             } catch (err) {
-                app.innerHTML = `
-                    <div class="empty-state">
-                        <p>データの取得に失敗しました</p>
-                        <button class="retry-btn" onclick="fetchGames()">再試行</button>
-                    </div>
-                `;
+                app.innerHTML = '<div style="text-align:center; padding: 100px;">Connection Error</div>';
             }
             state.loading = false;
         }
 
-        function showSkeleton() {
-            app.innerHTML = `<div class="skeleton-grid">${
-                Array(8).fill().map(() => `
-                    <div class="skeleton-card">
-                        <div class="skeleton-img"></div>
-                        <div class="skeleton-body">
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line w60"></div>
-                            <div class="skeleton-line w40"></div>
-                        </div>
-                    </div>
-                `).join('')
-            }</div>`;
-        }
-
-        // ===== FILTER & SORT =====
         function filter() {
             const search = $('searchInput').value.toLowerCase();
             const platform = $('platformFilter').value;
-            const genre = $('genreFilter').value;
-            const minRating = parseFloat($('ratingFilter').value) || 0;
             const range = getDateRange(state.period);
 
             state.filtered = state.games.filter(g => {
-                if (g.released && (g.released < range.start || g.released > range.end)) return false;
+                if (g.released && state.period !== 'all' && (g.released < range.start || g.released > range.end)) return false;
                 if (search && !g.name.toLowerCase().includes(search)) return false;
-                if (platform && g.platforms && !g.platforms.some(p => p.platform.name.toLowerCase().includes(platform))) return false;
-                if (genre && g.genres && !g.genres.some(x => x.slug.includes(genre))) return false;
-                if (minRating && (!g.rating || g.rating < minRating)) return false;
-                if (state.favOnly && !favorites.includes(g.id)) return false;
+                if (platform && !g.platforms?.some(p => p.platform.slug.includes(platform))) return false;
                 return true;
             });
 
             state.filtered.sort((a, b) => {
-                switch (state.sort) {
-                    case 'rating': return (b.rating || 0) - (a.rating || 0);
-                    case 'name': return a.name.localeCompare(b.name);
-                    case 'metacritic': return (b.metacritic || 0) - (a.metacritic || 0);
-                    default: return (a.released || 'z') > (b.released || 'z') ? 1 : -1;
-                }
+                if (state.sort === 'rating') return (b.rating || 0) - (a.rating || 0);
+                if (state.sort === 'metacritic') return (b.metacritic || 0) - (a.metacritic || 0);
+                return (a.released || 'z') > (b.released || 'z') ? 1 : -1;
             });
 
-            updateStats();
             render();
         }
 
-        function updateStats() {
-            $('statsText').textContent = `${state.filtered.length}件のゲーム`;
-        }
-
-        function clearFilters() {
-            $('searchInput').value = '';
-            $('platformFilter').value = '';
-            $('genreFilter').value = '';
-            $('ratingFilter').value = '';
-            state.favOnly = false;
-            $('favBtn').classList.remove('active');
-            filter();
-            toast('フィルターをリセットしました');
-        }
-
-        function toggleFavFilter() {
-            state.favOnly = !state.favOnly;
-            $('favBtn').classList.toggle('active', state.favOnly);
-            filter();
-        }
-
-        // ===== RENDER =====
         function render() {
-            if (state.view === 'grid') renderGrid();
-            else renderCalendar();
-        }
-
-        function renderGrid() {
             if (!state.filtered.length) {
-                app.innerHTML = '<div class="empty-state"><p>ゲームが見つかりませんでした</p></div>';
+                app.innerHTML = '<div style="text-align:center; padding: 100px; color:var(--text-dim);">No data found for this selection.</div>';
                 return;
             }
 
-            const today = new Date().toISOString().split('T')[0];
-            const soon = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
             app.innerHTML = `
                 <div class="games-grid">
-                    ${state.filtered.map((g, i) => `
-                        <article class="game-card" tabindex="0" onclick="openModal(${g.id})" onkeydown="if(event.key==='Enter')openModal(${g.id})" style="animation-delay:${Math.min(i * 0.02, 0.3)}s">
+                    ${state.filtered.map(g => `
+                        <article class="game-card" onclick="openModal(${g.id})">
                             <div class="card-image-wrap">
-                                <img class="card-image" src="${g.background_image || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 9%22><rect fill=%22%2318181b%22 width=%2216%22 height=%229%22/></svg>'}" alt="${g.name}" loading="lazy">
-                                <div class="card-badges">
-                                    ${g.released && g.released <= today ? '<span class="card-badge release">発売中</span>' : ''}
-                                    ${g.released && g.released > today && g.released <= soon ? '<span class="card-badge soon">まもなく</span>' : ''}
-                                </div>
-                                <button class="fav-btn" onclick="toggleFav(${g.id},event)" aria-label="お気に入り">
-                                    ${favorites.includes(g.id) ? '❤️' : '🤍'}
-                                </button>
+                                <img class="card-image" src="${g.background_image || ''}" alt="" loading="lazy">
                             </div>
                             <div class="card-body">
                                 <h2 class="card-title">${g.name}</h2>
-                                <div class="card-meta">
-                                    ${g.rating ? `<span class="meta-badge rating">★ ${g.rating.toFixed(1)}</span>` : ''}
-                                    ${g.metacritic ? `<span class="meta-badge score ${g.metacritic >= 75 ? 'high' : g.metacritic >= 50 ? 'mid' : 'low'}">${g.metacritic}</span>` : ''}
+                                <div class="card-footer">
+                                    <span class="date-text">${g.released ? g.released.replace(/-/g, '.') : 'TBA'}</span>
+                                    ${g.metacritic ? `<span class="score-tag">${g.metacritic}</span>` : ''}
                                 </div>
-                                <div class="card-platforms">
-                                    ${(g.platforms || []).slice(0, 4).map(p => `<span class="plat-tag">${shortPlat(p.platform.name)}</span>`).join('')}
-                                </div>
-                                ${g.genres?.length ? `<div class="card-genres">${g.genres.slice(0, 3).map(x => `<span class="genre-tag">${x.name}</span>`).join('')}</div>` : ''}
                             </div>
                         </article>
                     `).join('')}
                 </div>
-                ${state.hasMore ? `
-                    <div class="load-more-wrap">
-                        <button class="load-more-btn" onclick="loadMore()" ${state.loading ? 'disabled' : ''}>
-                            ${state.loading ? '読み込み中...' : 'もっと見る'}
-                        </button>
-                    </div>
-                ` : ''}
             `;
         }
 
-        function renderCalendar() {
-            const range = getDateRange(state.period);
-            const startDate = new Date(range.start);
-            const endDate = new Date(range.end);
-
-            const byDate = {};
-            state.filtered.forEach(g => {
-                if (g.released) {
-                    (byDate[g.released] = byDate[g.released] || []).push(g);
-                }
-            });
-
-            const months = [];
-            const cur = new Date(startDate);
-            cur.setDate(1);
-
-            while (cur <= endDate) {
-                const y = cur.getFullYear(), m = cur.getMonth();
-                const firstDay = new Date(y, m, 1).getDay();
-                const daysInMonth = new Date(y, m + 1, 0).getDate();
-
-                const days = [];
-                for (let i = 0; i < firstDay; i++) days.push({ empty: true });
-
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                    const today = new Date().toISOString().split('T')[0];
-                    days.push({ day: d, date: ds, isToday: ds === today, games: byDate[ds] || [] });
-                }
-
-                months.push({ name: `${y}年${m + 1}月`, days });
-                cur.setMonth(cur.getMonth() + 1);
-            }
-
-            const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
-
-            app.innerHTML = `
-                <div class="calendar">
-                    ${months.map(mon => `
-                        <div class="cal-month">
-                            <h3 class="cal-month-title">${mon.name}</h3>
-                            <div class="cal-grid">
-                                ${dayNames.map(d => `<div class="cal-header">${d}</div>`).join('')}
-                                ${mon.days.map(d => d.empty ?
-                                    '<div class="cal-day empty"></div>' :
-                                    `<div class="cal-day ${d.isToday ? 'today' : ''}">
-                                        <div class="cal-day-num">${d.day}</div>
-                                        ${d.games.slice(0, 2).map(g => `<div class="cal-game" onclick="openModal(${g.id})">${g.name}</div>`).join('')}
-                                        ${d.games.length > 2 ? `<div class="cal-more">+${d.games.length - 2}件</div>` : ''}
-                                    </div>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function loadMore() {
-            fetchGames(true);
-        }
-
-        // ===== MODAL =====
         async function openModal(id) {
             const modal = $('modal');
+            const content = $('modalContent');
             modal.classList.add('active');
-            $('modalBody').innerHTML = '<div class="empty-state"><p>読み込み中...</p></div>';
-            $('modalHero').src = '';
-
-            state.currentGame = id;
-            addToHistory(id);
+            content.innerHTML = '<div style="padding:100px; text-align:center;">Synchronizing...</div>';
 
             try {
-                const cacheKey = `game_${id}`;
-                let g, ss, movies;
-
-                if (apiCache[cacheKey]) {
-                    g = apiCache[cacheKey].game;
-                    ss = apiCache[cacheKey].ss;
-                    movies = apiCache[cacheKey].movies;
-                } else {
-                    const [gRes, ssRes, moviesRes] = await Promise.all([
-                        fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`),
-                        fetch(`https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`),
-                        fetch(`https://api.rawg.io/api/games/${id}/movies?key=${API_KEY}`)
-                    ]);
-                    g = await gRes.json();
-                    ss = await ssRes.json();
-                    movies = await moviesRes.json();
-                    apiCache[cacheKey] = { game: g, ss, movies };
-                }
-
-                $('modalHero').src = g.background_image || '';
-                updateModalFavBtn();
-
-                // Get trailer video URL (prefer 480p or max quality available)
-                const trailer = movies.results?.[0];
-                const trailerUrl = trailer?.data?.['480'] || trailer?.data?.max || null;
-
-                $('modalBody').innerHTML = `
-                    <h2 class="modal-title">${g.name}</h2>
-                    <div class="modal-meta">
-                        <span class="meta-badge rating" style="background:var(--accent-soft);color:var(--accent)">${formatDate(g.released)}</span>
-                        ${g.rating ? `<span class="meta-badge rating">★ ${g.rating.toFixed(1)} (${g.ratings_count}件)</span>` : ''}
-                        ${g.metacritic ? `<span class="meta-badge score ${g.metacritic >= 75 ? 'high' : g.metacritic >= 50 ? 'mid' : 'low'}">メタスコア ${g.metacritic}</span>` : ''}
+                const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`);
+                const g = await res.json();
+                content.innerHTML = `
+                    <div style="position:relative;">
+                        <img src="${g.background_image}" style="width:100%; aspect-ratio:16/9; object-fit:cover;">
+                        <button onclick="closeModal()" style="position:absolute; top:20px; right:20px; background:rgba(0,0,0,0.5); border:none; color:white; width:40px; height:40px; border-radius:50%; cursor:pointer;">✕</button>
                     </div>
-
-                    ${trailerUrl ? `
-                        <div class="modal-section" style="border-top:none;padding-top:0;margin-top:0">
-                            <div class="modal-section-title">🎬 トレーラー</div>
-                            <div class="modal-trailer">
-                                <video controls poster="${trailer.preview || g.background_image || ''}" preload="metadata">
-                                    <source src="${trailerUrl}" type="video/mp4">
-                                    お使いのブラウザは動画再生に対応していません。
-                                </video>
-                            </div>
+                    <div style="padding:40px;">
+                        <h2 style="font-family:'Outfit'; font-size:2rem; margin-bottom:20px;">${g.name}</h2>
+                        <div style="color:var(--text-dim); line-height:1.8; margin-bottom:30px;">${g.description_raw || 'No description available.'}</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; font-size:0.9rem;">
+                            <div><span style="color:var(--text-muted)">RELEASE</span><br>${g.released}</div>
+                            <div><span style="color:var(--text-muted)">DEVELOPER</span><br>${g.developers?.[0]?.name || 'N/A'}</div>
                         </div>
-                    ` : ''}
-
-                    <div class="modal-desc">${g.description_raw || '説明がありません。'}</div>
-
-                    <div class="modal-section">
-                        <div class="modal-section-title">対応機種</div>
-                        <div class="card-platforms">${(g.platforms || []).map(p => `<span class="plat-tag">${shortPlat(p.platform.name)}</span>`).join('') || '不明'}</div>
                     </div>
-
-                    ${g.genres?.length ? `
-                        <div class="modal-section">
-                            <div class="modal-section-title">ジャンル</div>
-                            <div class="card-genres">${g.genres.map(x => `<span class="genre-tag">${x.name}</span>`).join('')}</div>
-                        </div>
-                    ` : ''}
-
-                    ${g.developers?.length ? `
-                        <div class="modal-section">
-                            <div class="modal-section-title">開発</div>
-                            <p style="color:var(--text-secondary);font-size:0.85rem">${g.developers.map(d => d.name).join(', ')}</p>
-                        </div>
-                    ` : ''}
-
-                    ${g.publishers?.length ? `
-                        <div class="modal-section">
-                            <div class="modal-section-title">パブリッシャー</div>
-                            <p style="color:var(--text-secondary);font-size:0.85rem">${g.publishers.map(p => p.name).join(', ')}</p>
-                        </div>
-                    ` : ''}
-
-                    ${g.website ? `
-                        <div class="modal-section">
-                            <div class="modal-section-title">公式サイト</div>
-                            <a href="${g.website}" target="_blank" rel="noopener" class="modal-link">${g.website}</a>
-                        </div>
-                    ` : ''}
-
-                    ${ss.results?.length ? `
-                        <div class="modal-section">
-                            <div class="modal-section-title">スクリーンショット</div>
-                            <div class="modal-screenshots">
-                                ${ss.results.slice(0, 6).map(s => `<img class="modal-ss" src="${s.image}" onclick="window.open('${s.image}','_blank')" alt="Screenshot">`).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
                 `;
-            } catch {
-                $('modalBody').innerHTML = '<div class="empty-state"><p>読み込みに失敗しました</p><button class="retry-btn" onclick="openModal(' + id + ')">再試行</button></div>';
+            } catch (err) {
+                content.innerHTML = '<div style="padding:100px; text-align:center;">Failed to load data.</div>';
             }
         }
 
-        function closeModal() {
-            // 動画を停止
-            const video = document.querySelector('.modal-trailer video');
-            if (video) video.pause();
-
-            $('modal').classList.remove('active');
-            state.currentGame = null;
+        function closeModal() { $('modal').classList.remove('active'); }
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            $('themeBtn').textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
         }
-
-        function toggleModalFav() {
-            if (!state.currentGame) return;
-            toggleFav(state.currentGame);
-            updateModalFavBtn();
-        }
-
-        function updateModalFavBtn() {
-            const isFav = favorites.includes(state.currentGame);
-            $('modalFavBtn').innerHTML = isFav ? '❤️ お気に入り解除' : '🤍 お気に入り';
-        }
-
-        async function shareGame() {
-            const g = state.games.find(x => x.id === state.currentGame);
-            if (!g) return;
-
-            const text = `${g.name} - ${formatDate(g.released)}発売`;
-            const url = window.location.href;
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: g.name, text, url });
-                } catch {}
-            } else {
-                await navigator.clipboard.writeText(`${text}\n${url}`);
-                toast('リンクをコピーしました');
-            }
-        }
-
-        // ===== FAVORITES =====
-        function toggleFav(id, e) {
-            if (e) e.stopPropagation();
-            const idx = favorites.indexOf(id);
-            if (idx > -1) {
-                favorites.splice(idx, 1);
-                toast('お気に入りから削除しました');
-            } else {
-                favorites.push(id);
-                toast('お気に入りに追加しました');
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            render();
-        }
-
-        // ===== HISTORY =====
-        function addToHistory(id) {
-            const g = state.games.find(x => x.id === id);
-            if (!g) return;
-
-            history = history.filter(h => h.id !== id);
-            history.unshift({ id: g.id, name: g.name, image: g.background_image, date: Date.now() });
-            history = history.slice(0, 20);
-            localStorage.setItem('history', JSON.stringify(history));
-        }
-
         function toggleHistory() {
-            const panel = $('historyPanel');
-            panel.classList.toggle('open');
-            if (panel.classList.contains('open')) renderHistory();
+            // History panel placeholder
+            alert('History feature coming soon');
         }
-
-        function closeHistory() {
-            $('historyPanel').classList.remove('open');
-        }
-
-        function renderHistory() {
-            if (!history.length) {
-                $('historyList').innerHTML = '<div class="history-empty">まだ閲覧履歴がありません</div>';
-                return;
-            }
-
-            $('historyList').innerHTML = history.map(h => `
-                <div class="history-item" onclick="openModal(${h.id}); toggleHistory();">
-                    <img src="${h.image || ''}" alt="">
-                    <div class="history-item-info">
-                        <div class="history-item-title">${h.name}</div>
-                        <div class="history-item-date">${timeAgo(h.date)}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ===== UTILS =====
-        function shortPlat(name) {
-            const map = {
-                'PlayStation 5': 'PS5', 'PlayStation 4': 'PS4',
-                'Xbox Series S/X': 'Xbox X|S', 'Xbox One': 'Xbox One',
-                'Nintendo Switch': 'Switch', 'PC': 'PC',
-                'iOS': 'iOS', 'Android': 'Android', 'macOS': 'Mac', 'Linux': 'Linux'
-            };
-            return map[name] || name;
-        }
-
-        function formatDate(str) {
-            if (!str) return '未定';
-            const d = new Date(str);
-            return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
-        }
-
-        function timeAgo(ts) {
-            const diff = Date.now() - ts;
-            const mins = Math.floor(diff / 60000);
-            if (mins < 1) return 'たった今';
-            if (mins < 60) return `${mins}分前`;
-            const hrs = Math.floor(mins / 60);
-            if (hrs < 24) return `${hrs}時間前`;
-            const days = Math.floor(hrs / 24);
-            return `${days}日前`;
-        }
-
         function debounce(fn, ms) {
-            let t;
-            return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+            let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
         }
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toast(msg) {
-            const el = document.createElement('div');
-            el.className = 'toast';
-            el.textContent = msg;
-            $('toasts').appendChild(el);
-            setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 2500);
-        }
-
-        // Start
         init();
     </script>
 </body>
