@@ -155,18 +155,14 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 40px 24px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
         }
 
-        /* デザイナーズ・グリッド：カードごとに重みを変える */
         .card {
-            grid-column: span 3;
             cursor: pointer;
             transition: var(--transition-main);
         }
-
-        .card:nth-child(5n+1) { grid-column: span 6; } /* 定期的に大きいカードを混ぜる */
 
         .card-media {
             aspect-ratio: 16/10;
@@ -243,13 +239,13 @@
         }
 
         @media (max-width: 1024px) {
-            .card, .card:nth-child(5n+1) { grid-column: span 6; }
             .container { padding: 0 24px; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
         }
 
         @media (max-width: 640px) {
-            .card, .card:nth-child(5n+1) { grid-column: span 12; }
             .hero-title { font-size: 3.5rem; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
